@@ -106,8 +106,7 @@ public class AdCampaignMgmtRestAPITest
         client.accept(MediaType.APPLICATION_JSON);
         client.type(MediaType.APPLICATION_JSON);
         client.path("/services/ad");
-        Response resp = client
-                .post("{\"partner_id\":\"123123\",\"duration\":20,\"ad_content\":\"This is a new test\"}");
+        Response resp = client.post("{\"partner_id\":\"123123\",\"duration\":20,\"ad_content\":\"This is a new test\"}");
         assertTrue("Create Ad: Got a success", resp.getStatus() == 200);
     }
 
@@ -135,6 +134,38 @@ public class AdCampaignMgmtRestAPITest
         Response resp = client.post("{\"duration\":20,\"ad_content\":\"This is a new test\"}");
         assertTrue("Create Ad: Got a failure", resp.readEntity(String.class)
                 .equalsIgnoreCase("{\"status\":\"Partner id cannot be blank\",\"statusCode\":\"510\"}"));
+    }
+
+    /**
+     * Failed Ad creation - Two Active ad failure
+     * 
+     * @param validateUserRequest
+     * @return
+     * @throws IOException 
+     * @throws JsonProcessingException 
+     * @throws TascException
+     */
+    @Test
+    public void createAdFailureBySecondActiveAd() throws JsonProcessingException, IOException
+    {
+        /**
+         * We ensure that the ad store is empty
+         */
+        AdCampaignDAO.clearCampaignStore();
+
+        /**
+         * create good requests to add to the store
+         */
+        client.accept(MediaType.APPLICATION_JSON);
+        client.type(MediaType.APPLICATION_JSON);
+        client.path("/services/ad");
+        Response resp = client.post("{\"partner_id\":\"123123\",\"duration\":20,\"ad_content\":\"This is a new test\"}");
+        resp = client.post("{\"partner_id\":\"123123\",\"duration\":20,\"ad_content\":\"This is a second test\"}");
+        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(resp.readEntity(String.class));
+        
+        assertTrue("Create Ad: Got a failure for Duplicate Ad", node.get("statusCode").asText().equalsIgnoreCase("502"));
     }
 
     /**
