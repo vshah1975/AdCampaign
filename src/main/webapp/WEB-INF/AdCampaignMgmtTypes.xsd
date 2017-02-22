@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:model="http://framework.admgmt.comcast.com/model"
+	targetNamespace="http://framework.admgmt.comcast.com/model"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:complexType name="RequestHeaderType">
+		<xs:annotation>
+			<xs:documentation>Control Information Sent with Requests to the
+				SSML
+				as part of the SOAP Envelope Header
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="trackingID" type="xs:string" minOccurs="0" />
+			<xs:element name="sequenceID" type="xs:positiveInteger"
+				minOccurs="0" />
+			<xs:element name="timestamp" type="xs:token" minOccurs="0" />
+			<xs:element name="sourceServerID" type="xs:token"
+				minOccurs="0" />
+			<xs:element name="sourceSystemID" type="xs:token"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ServiceException">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="code" type="xs:integer" />
+				<xs:element name="message" type="xs:string" />
+				<xs:element name="extraMessage" type="xs:string"
+					minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RequestHeader" type="model:RequestHeaderType" />
+	<xs:element name="ResponseHeader" type="model:ResponseHeaderType" />
+	<xs:complexType name="ResponseHeaderType">
+		<xs:annotation>
+			<xs:documentation>Control Information Echoed with Responses from the
+				Service as part of the SOAP Envelope Header
+			</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+
+	<xs:element name="GetAdListRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="partner_id" type="xs:string" minOccurs="0"
+					maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="GetAdListResponse">
+		<xs:complexType>
+			<xs:sequence>
+                <xs:element name="status_code" type="xs:integer" />
+                <xs:element name="status_message" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="ad_list" type="model:AdList" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="AdList">
+		<xs:sequence>
+			<xs:element ref="model:AdInfo" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AdInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="partner_id" type="xs:string" />
+				<xs:element name="duration" type="xs:integer" />
+				<xs:element name="ad_content" type="xs:string" />
+				<xs:element name="ad_expiration" type="xs:string"
+					minOccurs="0" maxOccurs="1" />
+				<xs:element name="status" type="xs:string" minOccurs="0"
+					maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CreateAdRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="partner_id" type="xs:string" />
+				<xs:element name="duration" type="xs:integer" />
+				<xs:element name="ad_content" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="CreateAdResponse">
+		<xs:complexType>
+			<xs:sequence>
+                <xs:element name="status_code" type="xs:integer" />
+                <xs:element name="status_message" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

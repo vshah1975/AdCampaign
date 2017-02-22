@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error" name="UserMgmtConfig" monitorInterval="30">
+
+  <properties>
+    <property name="logFilename">adcampaignmgmt</property>
+    <property name="logDir">logs</property>
+  </properties>
+
+  <ThresholdFilter level="trace"/>
+
+  <appenders>
+    
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="[%d{ISO8601}] [%-5p] [%t] [%c{2}] [%m]%xEx%n"/>
+    </Console>
+    
+    <RollingFile name="RollingFile" fileName="${logDir}/${logFilename}.log" filePattern="${logDir}/${date:yyyy-MM}/${logFilename}-%d{yyyy-MM-dd}-%i.log.gz" immediateFlush="true">
+      <PatternLayout>
+        <pattern>[%d{ISO8601}] [%-5p] [%t] [%c{2}] [%m]%xEx%n</pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy />
+      </Policies>
+    </RollingFile>    
+  </appenders>
+
+  <loggers>
+    <logger name="com.comcast" level="debug" additivity="false">
+      <appender-ref ref="RollingFile" />      
+      <appender-ref ref="Console"/>
+    </logger>
+	
+    <root level="error">
+      <appender-ref ref="RollingFile"/>
+      <appender-ref ref="Console"/>
+    </root>
+  </loggers>
+
+</configuration>

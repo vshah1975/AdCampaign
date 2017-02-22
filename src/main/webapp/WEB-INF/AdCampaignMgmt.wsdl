@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:profilews="http://framework.admgmt.comcast.com/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:type="http://types.admgmt.comcast.com"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:model="http://framework.admgmt.comcast.com/model"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns="http://framework.admgmt.comcast.com/model"
+	targetNamespace="http://framework.admgmt.comcast.com/">
+
+	<types>
+		<xsd:schema xmlns:tns="http://framework.admgmt.comcast.com/"
+			xmlns:type="http://types.admgmt.comcast.com" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="unqualified" elementFormDefault="unqualified"
+			targetNamespace="http://types.admgmt.comcast.com">
+			<xs:import namespace="http://framework.admgmt.comcast.com/model"
+				schemaLocation="AdCampaignMgmtTypes.xsd" />
+		</xsd:schema>
+	</types>
+
+    <message name="GetAdListRequestMsg">
+        <part name="request" element="model:GetAdListRequest" />
+    </message>
+
+    <message name="GetAdListResponseMsg">
+        <part name="response" element="model:GetAdListResponse" />
+    </message>
+
+	<message name="RequestHeaderMsg">
+		<part name="requestHeader" element="model:RequestHeader" />
+	</message>
+
+	<message name="ResponseHeaderMsg">
+		<part name="responseHeader" element="model:ResponseHeader" />
+	</message>
+
+	<message name="serviceException">
+		<part name="exception" element="model:ServiceException" />
+	</message>
+
+	<message name="CreateAdRequestMsg">
+		<part name="request" element="model:CreateAdRequest" />
+	</message>
+
+	<message name="CreateAdResponseMsg">
+		<part name="response" element="model:CreateAdResponse" />
+	</message>
+	
+	<portType name="AdCampaignManagementPortType">
+        <operation name="GetAdList">
+            <input message="profilews:GetAdListRequestMsg">
+            </input>
+            <output message="profilews:GetAdListResponseMsg">
+            </output>
+            <fault name="serviceException" message="profilews:serviceException">
+            </fault>
+        </operation>
+		<operation name="CreateAd">
+			<input message="profilews:CreateAdRequestMsg">
+			</input>
+			<output message="profilews:CreateAdResponseMsg">
+			</output>
+			<fault name="serviceException" message="profilews:serviceException">
+			</fault>
+		</operation>
+	</portType>
+
+	<binding name="AdCampaignManagement" type="profilews:AdCampaignManagementPortType">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="GetAdList">
+			<soap:operation soapAction="GetAdList" />
+			<input>
+				<soap:header message="profilews:RequestHeaderMsg" part="requestHeader"
+					use="literal">
+				</soap:header>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:header message="profilews:ResponseHeaderMsg" part="responseHeader"
+					use="literal">
+				</soap:header>
+				<soap:body use="literal" />
+			</output>
+			<fault name="serviceException">
+				<soap:fault name="serviceException" use="literal" />
+			</fault>
+		</operation>
+
+		<operation name="CreateAd">
+			<soap:operation soapAction="CreateAd" />
+			<input>
+				<soap:header message="profilews:RequestHeaderMsg" part="requestHeader"
+					use="literal">
+				</soap:header>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:header message="profilews:ResponseHeaderMsg" part="responseHeader"
+					use="literal">
+				</soap:header>
+				<soap:body use="literal" />
+			</output>
+			<fault name="serviceException">
+				<soap:fault name="serviceException" use="literal" />
+			</fault>
+		</operation>
+
+	</binding>
+
+	<service name="AdCampaignManagementPortType">
+		<port name="AdCampaignManagementPortType" binding="profilews:AdCampaignManagement">
+			<soap:address location="@portTypeURL@" />
+		</port>
+	</service>
+</definitions>
